@@ -36,10 +36,21 @@
 * Be aware that design patterns are not limited to object-oriented programming.
 * Understand that design patterns are not languagespecific idioms.
 # Guideline 13: Design Patterns Are Everywhere
+* Understand that any kind of abstraction and any attempt to decouple likely represents a known design pattern.
+* Apply design patterns based on their intent whenever necessary.
 # Guideline 14: Use a Design Pattern’s Name to Communicate Intent
+* Use the name of a design pattern to communicate the intent of a solution.
+* Use the name of a design pattern to improve readability.
 # Guideline 15: Design for the Addition of Types or Operations
+* Understand the choice between the addition of types OR operations in dynamic polymorphism.
+* Prefer an object-oriented solution when you primarily want to add types.
+* Prefer a procedural/functional solution when you primarily want to add operations.
 # Guideline 16: Use Visitor to Extend Operations
+* Keep in mind that it’s difficult to add a new operation in an existing inheritance hierarchy.
+* Apply the Visitor design pattern with the intent of enabling the easy addition of operations.
 # Guideline 17: Consider std::variant for Implementing Visitor
+* Be aware of the advantages of std::variant in comparison to an object-oriented Visitor solution.
+* 
 # Guideline 18: Beware the Performance of Acyclic Visitor
 # Guideline 19: Use Strategy to Isolate How Things Are Done
 # Guideline 20: Favor Composition over Inheritance
