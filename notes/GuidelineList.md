@@ -1,21 +1,40 @@
 # Guideline 1: Understand the Importance of Software Design
-* Focus less on C++ language details and more on software design
-* Understand software design as the art of managing dependencies and abstractions
+* Focus less on C++ language details and more on software design.
+* Understand software design as the art of managing dependencies and abstractions.
 # Guideline 2: Design for Change
-* Adhere to the Single-Responsibility Principle (SRP) to separate concerns
+* Adhere to the Single-Responsibility Principle (SRP) to separate concerns.
 * Follow the Don’t Repeat Yourself (DRY) principle to minimize duplication.
 # Guideline 3: Separate Interfaces to Avoid Artificial Coupling
 * Adhere to the Interface Segregation Principle (ISP) to separate concerns in interfaces.
 * Consider the ISP as a special case of the Single-Responsibility Principle (SRP).
 # Guideline 4: Design for Testability
+* Consider private member functions that need testing to be misplaced.
+* Prefer nonmember non-friend functions to member functions.
 # Guideline 5: Design for Extension
+* Adhere to the Open-Closed Principle (OCP) to keep code open for extension but closed for modification.
+* Design for code additions by means of base classes, templates, function overloading, or template specialization.
 # Guideline 6: Adhere to the Expected Behavior of Abstractions
+* Understand that an abstraction represents a set of requirements and expectations.
+* Follow the Liskov Substitution Principle (LSP) to adhere to the expected behavior of abstractions.
+* Communicate the expectations of an abstraction.
 # Guideline 7: Understand the Similarities Between Base Classes and Concepts
+* Consider concepts (both the C++20 feature and pre- C++20 named template arguments) as the static equivalent of base classes.
 # Guideline 8: Understand the Semantic Requirements of Overload Sets
+* Be aware that function overloading is a compile-time abstraction mechanism.
+* Keep in mind that there are expectations on the behavior of functions within an overload set.
 # Guideline 9: Pay Attention to the Ownership of Abstractions
+* Keep in mind that in a proper architecture, low-level implementation details depend on high-level abstractions.
+* Adhere to the Dependency Inversion Principle (DIP), and assign abstractions to the high level of an architecture.
+* Make sure abstractions are owned by the high level, not by the low level.
 # Guideline 10: Consider Creating an Architectural Document
+* Understand that an architectural document serves the purpose of maintaining and communicating the current state of the architecture.
 # Guideline 11: Understand the Purpose of Design Patterns
+* Understand that design patterns are proven, named solutions with an intent to decouple.
+* Realize that design patterns introduce some kind of abstraction.
 # Guideline 12: Beware of Design Pattern Misconceptions
+* Consider design patterns as a tool to solve a design problem, not as a goal.
+* Be aware that design patterns are not limited to object-oriented programming.
+* Understand that design patterns are not languagespecific idioms.
 # Guideline 13: Design Patterns Are Everywhere
 # Guideline 14: Use a Design Pattern’s Name to Communicate Intent
 # Guideline 15: Design for the Addition of Types or Operations
