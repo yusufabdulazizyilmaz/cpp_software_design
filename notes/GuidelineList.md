@@ -22,25 +22,24 @@
 # Guideline 16: Use Visitor to Extend Operations
 # Guideline 17: Consider std::variant for Implementing Visitor
 # Guideline 18: Beware the Performance of Acyclic Visitor
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
+# Guideline 19: Use Strategy to Isolate How Things Are Done
+# Guideline 20: Favor Composition over Inheritance
+# Guideline 21: Use Command to Isolate What Things Are Done
+# Guideline 22: Prefer Value Semantics over Reference Semantics
+# Guideline 23: Prefer a Value-Based Implementation of Strategy and Command
+# Guideline 24: Use Adapters to Standardize Interfaces
+# Guideline 25: Apply Observers as an Abstract Notification Mechanism
+# Guideline 26: Use CRTP to Introduce Static Type Categories
+# Guideline 27: Use CRTP for Static Mixin Classes
+# Guideline 28: Build Bridges to Remove Physical Dependencies
+# Guideline 29: Be Aware of Bridge Performance Gains and Losses
+# Guideline 30: Apply Prototype for Abstract Copy Operations
+# Guideline 31: Use External Polymorphism for Nonintrusive Runtime Polymorphism
+# Guideline 32: Consider Replacing Inheritance Hierarchies with Type Erasure
+# Guideline 33: Be Aware of the Optimization Potential of Type Erasure
+# Guideline 34: Be Aware of the Setup Costs of Owning Type Erasure Wrappers
+# Guideline 35: Use Decorators to Add Customization Hierarchically
+# Guideline 36: Understand the Tradeoff Between Runtime and Compile Time Abstraction
+# Guideline 37: Treat Singleton as an Implementation Pattern, Not a Design Pattern
+# Guideline 38: Design Singletons for Change and Testability
+# Guideline 39: Continue to Learn About Design Patterns
