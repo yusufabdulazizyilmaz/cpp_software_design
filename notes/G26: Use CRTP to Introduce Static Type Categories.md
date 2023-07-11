@@ -128,3 +128,165 @@ or any kind of constraint.
 
 **What we need is a totally new set of types, a new type
 category.**
+Solution 2: base class
+```cpp
+template <typename T> // Type of the elements
+class DenseVector
+{
+public:
+	virtual ~DenseVector() = default;
+	virtual size_t size() const = 0;
+	virtual T &operator[](size_t index) = 0;
+	virtual T const &operator[](size_t index) const = 0;
+	// ...
+};
+template <typename T>
+std::ostream &operator<<(std::ostream &os, DenseVector<T> const &vector)
+{
+	// ... as before
+}
+```
+Problems:  
+* how to declare the begin() and end() functions.
+* how to abstract from different iterator types, such as std::vector<T>::iterator
+* turn all our member functions into virtual member functions
+# The CRTP Design Pattern Explained
+**Intent: “Define a compile-time abstraction for a family of related
+types.”**  
+The CRTP design pattern builds on the common idea of
+creating an abstraction using a base class.(class template). But instead of
+establishing a runtime relationship between base and
+derived classes via virtual functions, it creates a compile-
+time relationship.
+```cpp
+template< typename Derived >
+struct DenseVector
+{
+   constexpr Derived&       derived()       noexcept { return static_cast<Derived&>(*this); }
+   constexpr Derived const& derived() const noexcept { return static_cast<Derived const&>(*this); }
+
+   constexpr size_t size() const noexcept { return derived().size(); }
+
+   decltype(auto) operator[]( size_t index )       noexcept { return derived()[index]; }
+   decltype(auto) operator[]( size_t index ) const noexcept { return derived()[index]; }
+
+   decltype(auto) begin()       noexcept { return derived().begin(); }
+   decltype(auto) begin() const noexcept { return derived().begin(); }
+   decltype(auto) end()         noexcept { return derived().end(); }
+   decltype(auto) end()   const noexcept { return derived().end(); }
+protected:
+   ~DenseVector() = default;	
+};
+
+template< typename Derived >
+std::ostream& operator<<( std::ostream& os, DenseVector<Derived> const& vector )
+{
+   size_t const size( vector.size() );
+
+   os << "(";
+   for( size_t i=0UL; i<size; ++i ) {
+      os << " " << vector[i];
+   }
+   os << " )";
+
+   return os;
+}
+
+template< typename Derived >
+decltype(auto) l2norm( DenseVector<Derived> const& vector )
+{
+   using T = typename Derived::value_type;
+   return std::sqrt( std::inner_product( std::begin(vector), std::end(vector)
+                                       , std::begin(vector), T{} ) );
+}
+template< typename T >
+class DynamicVector  : public DenseVector< DynamicVector<T> >
+{};
+
+template< typename T, size_t Size >
+class StaticVector   : public DenseVector< StaticVector<T,Size> >
+{};
+```
+* Since we want to avoid any virtual functions, we’re also not
+interested in a virtual destructor. Therefore, we implement
+the destructor as a nonvirtual function in the protected
+section of the class.
+* There is no way that you can use the
+nested types of the derived class for the return types of the
+CRTP class. decltype(auto)
+# Analyzing the Shortcomings of the CRTP Design Pattern
+* There is no common base class!
+Thus, whenever a common base class is required, a
+common abstraction that can be used, for instance, to store
+different types in a collection, the CRTP design pattern is
+not the right choice
+* Everything that comes in touch with a CRTP base class
+becomes a template itself.
+* CRTP is an intrusive design pattern.
+* CRTP does not provide runtime
+polymorphism, only compile-time polymorphism. Therefore,
+the pattern makes sense only if some kind of static type
+abstraction is required.
+# The Future of CRTP: A Comparison Between CRTP and C++20 Concepts
+```cpp
+struct DenseVectorTag {};
+
+template< typename T >
+struct IsDenseVector
+   : public std::is_base_of<DenseVectorTag,T>
+{};
+
+template< typename T >
+constexpr bool IsDenseVector_v = IsDenseVector<T>::value;
+
+template< typename T >
+concept DenseVector =
+   requires ( T t, size_t index ) {
+      t.size();
+      t[index];
+      { t.begin() } -> std::same_as<typename T::iterator>;
+      { t.end() } -> std::same_as<typename T::iterator>;
+   } &&
+   requires ( T const t, size_t index ) {
+      t[index];
+      { t.begin() } -> std::same_as<typename T::const_iterator>;
+      { t.end() } -> std::same_as<typename T::const_iterator>;
+   } &&
+   IsDenseVector_v<T>;
+
+template< DenseVector VectorT >
+std::ostream& operator<<( std::ostream& os, VectorT const& vector )
+{
+   size_t const size( vector.size() );
+
+   os << "(";
+   for( size_t i=0UL; i<size; ++i ) {
+      os << " " << vector[i];
+   }
+   os << " )";
+
+   return os;
+}
+
+template< DenseVector VectorT >
+decltype(auto) l2norm( VectorT const& vector )
+{
+   using T = typename VectorT::value_type;
+   return std::sqrt( std::inner_product( std::begin(vector), std::end(vector)
+                                       , std::begin(vector), T{} ) );
+}
+
+template< typename T >
+class DynamicVector : private DenseVectorTag
+{};
+
+
+template< typename T, size_t Size >
+class StaticVector
+{};
+// specialization of IsDenseVector
+template< typename T, size_t Size >
+struct IsDenseVector< StaticVector<T,Size> >
+   : public std::true_type
+{};
+```
