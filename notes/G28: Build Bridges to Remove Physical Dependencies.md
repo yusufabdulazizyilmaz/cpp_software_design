@@ -99,3 +99,47 @@ ElectricCar::ElectricCar(/*maybe some engine arguments*/)
 # The Bridge Design Pattern Explained
 **Intent: “Decouple an abstraction from its implementation so that the
 two can vary independently.”**
+![Earth](https://github.com/yusufabdulazizyilmaz/cpp_software_design/blob/main/notes/UML%20of%20the%20Bridge.png)
+```cpp
+//---- <Car.h> ----------------
+#include <Engine.h>
+#include <memory>
+#include <utility>
+class Car
+{
+protected:
+	explicit Car(std::unique_ptr<Engine> engine)
+		: pimpl_(std::move(engine))
+	{
+	}
+
+public:
+	virtual ~Car() = default;
+	virtual void drive() = 0;
+
+protected:
+	Engine *getEngine() { return pimpl_.get(); }
+	Engine const *getEngine() const { return pimpl_.get(); }
+
+private:
+	std::unique_ptr<Engine> pimpl_; // Pointer-to-implementation (pimpl)
+};
+
+//---- <ElectricCar.h> ----------------
+#include <Engine.h>
+#include <memory>
+class ElectricCar : public Car
+{
+public:
+	explicit ElectricCar(/*maybe some engine arguments*/);
+	void drive() override;
+};
+
+//---- <ElectricCar.cpp> ----------------
+#include <ElectricCar.h>
+#include <ElectricEngine.h>
+ElectricCar::ElectricCar(/*maybe some engine arguments*/)
+	: Car(std::make_unique<ElectricEngine>(/*engine arguments*/))
+{
+}
+```
