@@ -62,4 +62,9 @@ private:
 ```
 * (External Polymorphism) ShapeConcept and OwningShapeModel moved to the detail namespace two classes are now
 becoming implementation details, i.e., they are not intended for direct use anymore.
-* 
+* (Prototype) ShapeConcept now also introduces a pure virtual clone() function.
+* (Bridge) All we need is a value type, a wrapper around the external hierarchy Shape class. Shape class has the templated constructor.
+# Analyzing the Shortcomings of the Type Erasure Design Pattern
+* implementation complexity of this pattern.
+* we are now dealing with values that can be copied and moved, using Type Erasure
+for binary operations (equality) is not straightforward.
